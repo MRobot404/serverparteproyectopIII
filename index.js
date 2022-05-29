@@ -1,5 +1,4 @@
-console.log("Grupo 3");
-
+console.log("Hello Friend");
 const app = require("express")();
 const serverHttp = require("http").Server(app);
 const io = require("socket.io")(serverHttp, {
@@ -10,23 +9,22 @@ const io = require("socket.io")(serverHttp, {
 
 // en esta constante vamos a guardar todos nuestros mensajes
 const myMessages = [];
-const myUsers=[];
+const myUsers = [];
+const myUsersleft = [];
 
 //recepcion de conexiones o mensajes
 io.on("connection", function (socket) {
   socket.on("conectado", function (data) {
-    myUsers.push(data); 
-    console.log(data)// guarda el dato en la variable myUsers
-    console.log(socket.id)
+    myUsers.push(data);
+    console.log(myUsers) // guarda el dato en la variable myUsers
     //emitir el texto que se ingreso.
-    socket.emit("usuarios", myUsers);
-console.log(myUsers)
+    socket.emit("usuariosc", myUsers);
     //Se envia broadcast a todos los usuarios
-    io.emit("usuarios", myUsers);
+    io.emit("usuariosc", myUsers);
   });
   socket.on("send-message", function (data) {
-    myMessages.push(data); 
-    console.log(data)// guarda el mensaje a la variable mymessages
+    myMessages.push(data);
+    console.log(data); // guarda el mensaje a la variable mymessages
 
     //emitir el texto que se ingreso.
     socket.emit("text-event", myMessages);
@@ -35,12 +33,15 @@ console.log(myUsers)
     io.emit("text-event", myMessages);
   });
 
-  socket.on("disconnect",function  (id) {
-      console.log(id);
-    })
-
+  socket.on("desconectado", function (data) {
+   
+    myUsersleft.push(data);
+    console.log("Desconectado")
+    socket.emit("usuariosd", myUsersleft);
+    //Se envia broadcast a todos los usuarios
+    io.emit("usuariosd", myUsersleft);
+  });
 });
-
 
 //levantar servidor http
 serverHttp.listen(3000, () => {
