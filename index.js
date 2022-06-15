@@ -33,7 +33,7 @@ io.on("connection", function (socket) {
     socket.emit("text-event", myMessages);
     //Se envia broadcast a todos los usuarios
     io.emit("text-event", myMessages);
-    myTyping.splice(0,1)
+    myTyping.splice(0, 1);
   });
 
   socket.on("desconectado", function (data) {
@@ -45,9 +45,9 @@ io.on("connection", function (socket) {
   });
   socket.on("typing", function (data) {
     myTyping.push(data.id);
-    socket.emit("escribiendo",myTyping);
+    socket.emit("escribiendo", myTyping);
     io.emit("escribiendo", myTyping);
-    myTyping.splice(0,1)
+    myTyping.splice(0, 1);
   });
 });
 
